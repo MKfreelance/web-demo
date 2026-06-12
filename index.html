@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kaif & Delicious — Fresh Food, Real Taste</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d0d; --surface: #161616; --card: #1e1e1e; --border: #2a2a2a;
+    --gold: #c9a84c; --gold-light: #e8c97a; --red: #d94f3d; --text: #f0ece4; --muted: #888; --green: #4caf50;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; min-height: 100vh; }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(13,13,13,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 0 5%; display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .logo { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--gold); }
+  .logo span { color: var(--text); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.875rem; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-actions { display: flex; gap: 1rem; align-items: center; }
+  .wa-btn { background: #25D366; color: #fff; border: none; padding: 0.5rem 1rem; border-radius: 50px; font-size: 0.8rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 0.4rem; text-decoration: none; transition: opacity 0.2s; }
+  .wa-btn:hover { opacity: 0.85; }
+  .cart-btn { background: var(--gold); color: #000; border: none; padding: 0.5rem 1.2rem; border-radius: 50px; font-size: 0.85rem; font-weight: 700; cursor: pointer; position: relative; transition: background 0.2s; }
+  .cart-btn:hover { background: var(--gold-light); }
+  .cart-count { position: absolute; top: -6px; right: -6px; background: var(--red); color: #fff; font-size: 0.65rem; font-weight: 700; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+  .hero { min-height: 100vh; display: flex; align-items: center; padding: 0 5%; padding-top: 64px; background: radial-gradient(ellipse at 70% 50%, rgba(201,168,76,0.08) 0%, transparent 60%), var(--bg); }
+  .hero-content { max-width: 600px; }
+  .hero-eyebrow { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; }
+  .hero-eyebrow::before { content: ''; width: 32px; height: 1px; background: var(--gold); }
+  h1 { font-family: 'Playfair Display', serif; font-size: clamp(3rem, 6vw, 5.5rem); font-weight: 900; line-height: 1.05; margin-bottom: 1.5rem; }
+  h1 em { font-style: italic; color: var(--gold); }
+  .hero-sub { color: var(--muted); font-size: 1.05rem; line-height: 1.7; margin-bottom: 2.5rem; max-width: 460px; }
+  .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary { background: var(--gold); color: #000; border: none; padding: 0.9rem 2rem; border-radius: 50px; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
+  .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); padding: 0.9rem 2rem; border-radius: 50px; font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+  section { padding: 5rem 5%; }
+  .section-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.75rem; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 3vw, 2.8rem); font-weight: 700; margin-bottom: 1rem; }
+  .section-sub { color: var(--muted); font-size: 0.95rem; line-height: 1.7; max-width: 520px; margin-bottom: 3rem; }
+  #about { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+  .about-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2rem; }
+  .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; }
+  .stat-number { font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 700; color: var(--gold); }
+  .stat-label { color: var(--muted); font-size: 0.8rem; margin-top: 0.25rem; }
+  .about-visual { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 3rem; text-align: center; position: relative; overflow: hidden; }
+  .about-visual::before { content: '🍽️'; font-size: 8rem; opacity: 0.15; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+  .about-visual-inner { position: relative; z-index: 1; }
+  .about-visual h3 { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--gold); margin-bottom: 1rem; }
+  .about-visual p { color: var(--muted); font-size: 0.9rem; line-height: 1.7; }
+  .menu-categories { display: flex; gap: 0.75rem; margin-bottom: 2.5rem; flex-wrap: wrap; }
+  .cat-btn { background: var(--card); border: 1px solid var(--border); color: var(--muted); padding: 0.5rem 1.25rem; border-radius: 50px; font-size: 0.8rem; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+  .cat-btn.active, .cat-btn:hover { background: var(--gold); color: #000; border-color: var(--gold); }
+  .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+  .menu-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; transition: transform 0.2s, border-color 0.2s; }
+  .menu-card:hover { transform: translateY(-4px); border-color: rgba(201,168,76,0.3); }
+  .menu-img { width: 100%; height: 160px; background: linear-gradient(135deg, #1a1a1a, #252525); display: flex; align-items: center; justify-content: center; font-size: 3.5rem; }
+  .menu-info { padding: 1.25rem; }
+  .menu-name { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 0.4rem; }
+  .menu-desc { color: var(--muted); font-size: 0.8rem; line-height: 1.5; margin-bottom: 1rem; }
+  .menu-footer { display: flex; align-items: center; justify-content: space-between; }
+  .menu-price { font-size: 1.1rem; font-weight: 700; color: var(--gold); }
+  .add-btn { background: var(--gold); color: #000; border: none; padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.8rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+  .add-btn:hover { background: var(--gold-light); }
+  .add-btn.added { background: var(--green); color: #fff; }
+  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 200; display: none; align-items: center; justify-content: center; padding: 1rem; backdrop-filter: blur(4px); }
+  .overlay.active { display: flex; }
+  .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; width: 100%; max-width: 540px; max-height: 90vh; overflow-y: auto; padding: 2rem; }
+  .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
+  .modal-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; }
+  .close-btn { background: var(--card); border: 1px solid var(--border); color: var(--text); width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; }
+  .form-group { margin-bottom: 1.25rem; }
+  .form-label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; }
+  .form-input { width: 100%; background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 0.75rem 1rem; border-radius: 10px; font-size: 0.9rem; font-family: 'Inter', sans-serif; transition: border-color 0.2s; outline: none; }
+  .form-input:focus { border-color: var(--gold); }
+  textarea.form-input { resize: vertical; min-height: 80px; }
+  .cart-item { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid var(--border); font-size: 0.875rem; }
+  .cart-item-qty { display: flex; align-items: center; gap: 0.5rem; }
+  .qty-btn { background: var(--border); border: none; color: var(--text); width: 24px; height: 24px; border-radius: 6px; cursor: pointer; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; }
+  .cart-total { display: flex; justify-content: space-between; padding: 1rem 0; font-weight: 700; font-size: 1rem; border-top: 1px solid var(--border); margin-bottom: 1rem; }
+  .total-amount { color: var(--gold); font-size: 1.2rem; }
+  .submit-order-btn { width: 100%; background: var(--gold); color: #000; border: none; padding: 1rem; border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+  .submit-order-btn:hover { background: var(--gold-light); transform: translateY(-1px); }
+  .submit-order-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  .success-screen { text-align: center; padding: 2rem 0; }
+  .success-icon { font-size: 4rem; margin-bottom: 1rem; }
+  .success-title { font-family: 'Playfair Display', serif; font-size: 1.6rem; margin-bottom: 0.75rem; color: var(--green); }
+  .success-msg { color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
+  #support { background: var(--surface); border-top: 1px solid var(--border); }
+  .support-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; }
+  .support-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; text-align: center; transition: border-color 0.2s; }
+  .support-card:hover { border-color: rgba(201,168,76,0.3); }
+  .support-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+  .support-card h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; margin-bottom: 0.5rem; }
+  .support-card p { color: var(--muted); font-size: 0.82rem; line-height: 1.6; margin-bottom: 1.25rem; }
+  .support-link { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.82rem; font-weight: 600; text-decoration: none; padding: 0.5rem 1.25rem; border-radius: 50px; transition: all 0.2s; }
+  .support-link.wa { background: #25D366; color: #fff; }
+  .support-link.email { background: var(--gold); color: #000; }
+  .support-link.phone { background: var(--red); color: #fff; }
+  .support-link:hover { opacity: 0.85; }
+  footer { background: #000; border-top: 1px solid var(--border); padding: 2.5rem 5%; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+  .footer-logo { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--gold); }
+  .footer-text { color: var(--muted); font-size: 0.8rem; }
+  .divider { width: 48px; height: 2px; background: var(--gold); margin: 1rem 0 1.5rem; }
+  .empty-cart { text-align: center; padding: 2rem; color: var(--muted); }
+  .empty-cart-icon { font-size: 3rem; margin-bottom: 0.75rem; }
+  .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--card); border: 1px solid var(--gold); color: var(--text); padding: 0.75rem 1.5rem; border-radius: 50px; font-size: 0.85rem; font-weight: 500; z-index: 999; transition: transform 0.3s ease; white-space: nowrap; }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  html { scroll-behavior: smooth; }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  @media (max-width: 768px) { .nav-links { display: none; } .about-grid { grid-template-columns: 1fr; } .about-visual { display: none; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Kaif <span>&</span> Delicious</div>
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#support">Support</a></li>
+  </ul>
+  <div class="nav-actions">
+    <a href="https://wa.me/919634950165?text=Hi!%20I%20need%20help%20with%20my%20order." class="wa-btn" target="_blank">💬 WhatsApp</a>
+    <button class="cart-btn" onclick="openCart()">🛒 Cart <span class="cart-count" id="cartCount">0</span></button>
+  </div>
+</nav>
+
+<section class="hero" id="home">
+  <div class="hero-content">
+    <div class="hero-eyebrow">Now Accepting Orders Online</div>
+    <h1>Real Food,<br><em>Real Taste.</em></h1>
+    <p class="hero-sub">Fresh ingredients, handcrafted recipes, delivered warm to your door. Every dish made with care — because you deserve nothing less.</p>
+    <div class="hero-cta">
+      <button class="btn-primary" onclick="document.getElementById('menu').scrollIntoView()">Order Now</button>
+      <button class="btn-outline" onclick="document.getElementById('about').scrollIntoView()">Our Story</button>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="about-grid">
+    <div>
+      <div class="section-label">Who We Are</div>
+      <h2 class="section-title">Kaif & Delicious</h2>
+      <div class="divider"></div>
+      <p style="color:var(--muted);line-height:1.8;font-size:0.95rem">Born from a love of authentic flavors, Kaif & Delicious brings together the richness of home-style cooking with the ease of online ordering.</p>
+      <p style="color:var(--muted);line-height:1.8;font-size:0.95rem;margin-top:1rem">We source local, cook fresh, and deliver fast. No compromises, no shortcuts — just real food made the right way.</p>
+      <div class="about-stats">
+        <div class="stat-card"><div class="stat-number">500+</div><div class="stat-label">Happy Customers</div></div>
+        <div class="stat-card"><div class="stat-number">30+</div><div class="stat-label">Menu Items</div></div>
+        <div class="stat-card"><div class="stat-number">4.8★</div><div class="stat-label">Average Rating</div></div>
+        <div class="stat-card"><div class="stat-number">30 Min</div><div class="stat-label">Avg. Delivery</div></div>
+      </div>
+    </div>
+    <div class="about-visual">
+      <div class="about-visual-inner">
+        <h3>Kaif & Delicious</h3>
+        <p>Serving happiness since day one. Our kitchen is your kitchen — made with love, served with pride.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="menu">
+  <div class="section-label">What We Serve</div>
+  <h2 class="section-title">Our Menu</h2>
+  <p class="section-sub">Fresh, flavorful, and made to order. Pick your favorites and we'll have them ready for you.</p>
+  <div class="menu-categories">
+    <button class="cat-btn active" onclick="filterMenu('all', this)">All</button>
+    <button class="cat-btn" onclick="filterMenu('starters', this)">Starters</button>
+    <button class="cat-btn" onclick="filterMenu('main', this)">Main Course</button>
+    <button class="cat-btn" onclick="filterMenu('rice', this)">Rice & Biryani</button>
+    <button class="cat-btn" onclick="filterMenu('drinks', this)">Drinks</button>
+  </div>
+  <div class="menu-grid" id="menuGrid"></div>
+</section>
+
+<section id="support">
+  <div class="section-label">We're Here For You</div>
+  <h2 class="section-title">Customer Care</h2>
+  <p class="section-sub">Any issue with your order? Reach out — we respond fast.</p>
+  <div class="support-grid">
+    <div class="support-card">
+      <div class="support-icon">💬</div>
+      <h3>WhatsApp Support</h3>
+      <p>Fastest way to reach us. Chat directly with our team for order help, changes, or feedback.</p>
+      <a href="https://wa.me/919634950165?text=Hi!%20I%20need%20help%20with%20my%20order." class="support-link wa" target="_blank">Chat Now</a>
+    </div>
+    <div class="support-card">
+      <div class="support-icon">📧</div>
+      <h3>Email Us</h3>
+      <p>For detailed queries, complaints, or feedback. We reply within a few hours.</p>
+      <a href="mailto:kaifsiddiqui28637@gmail.com" class="support-link email">Send Email</a>
+    </div>
+    <div class="support-card">
+      <div class="support-icon">📞</div>
+      <h3>Call Us</h3>
+      <p>Need to talk? Our team is available during business hours — 10 AM to 10 PM.</p>
+      <a href="tel:+919634950165" class="support-link phone">Call Now</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Kaif & Delicious</div>
+  <div class="footer-text">© 2025 Kaif & Delicious. All rights reserved.</div>
+  <div class="footer-text">📍 Nanauta, Saharanpur, UP</div>
+</footer>
+
+<div class="overlay" id="cartOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Your Order</div>
+      <button class="close-btn" onclick="closeCart()">✕</button>
+    </div>
+    <div id="cartContent"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ── CONFIG ──
+  const TELEGRAM_TOKEN = '8908965629:AAGioYpwvGc6gE21dDIesANCFWPlQ2xBkwg';
+  const TELEGRAM_CHAT_ID = '8258137553';
+  // ⬇️ Railway server URL — deploy ke baad yahan update karo
+  const SERVER_URL = 'https://YOUR-RAILWAY-URL.up.railway.app';
+
+  const menuItems = [
+    { id:1,  name:'Chicken Tikka',       category:'starters', price:180, emoji:'🍗', desc:'Tender chicken marinated in spices, grilled to perfection' },
+    { id:2,  name:'Paneer Pakora',        category:'starters', price:120, emoji:'🧀', desc:'Crispy cottage cheese fritters with mint chutney' },
+    { id:3,  name:'Veg Spring Roll',      category:'starters', price:100, emoji:'🌮', desc:'Crispy rolls stuffed with fresh veggies and spices' },
+    { id:4,  name:'Butter Chicken',       category:'main',     price:280, emoji:'🍛', desc:'Classic creamy tomato gravy with tender chicken' },
+    { id:5,  name:'Dal Makhani',          category:'main',     price:200, emoji:'🫘', desc:'Slow-cooked black lentils in rich buttery gravy' },
+    { id:6,  name:'Paneer Butter Masala', category:'main',     price:220, emoji:'🍲', desc:'Soft paneer in rich cashew-tomato gravy' },
+    { id:7,  name:'Chicken Biryani',      category:'rice',     price:320, emoji:'🍚', desc:'Fragrant basmati rice with spiced chicken, slow cooked' },
+    { id:8,  name:'Veg Biryani',          category:'rice',     price:220, emoji:'🌾', desc:'Aromatic rice with fresh vegetables and whole spices' },
+    { id:9,  name:'Jeera Rice',           category:'rice',     price:120, emoji:'🍙', desc:'Fluffy basmati rice tempered with cumin' },
+    { id:10, name:'Mango Lassi',          category:'drinks',   price:80,  emoji:'🥭', desc:'Chilled yogurt drink blended with Alphonso mango' },
+    { id:11, name:'Masala Chai',          category:'drinks',   price:40,  emoji:'☕', desc:'Spiced Indian tea brewed the traditional way' },
+    { id:12, name:'Cold Coffee',          category:'drinks',   price:90,  emoji:'🧋', desc:'Creamy cold coffee with a hint of cardamom' },
+  ];
+
+  let cart = {};
+  let currentFilter = 'all';
+  let activeReminders = {}; // orderId -> { intervalId, lastUpdateId }
+
+  // ── TELEGRAM SEND ──
+  async function sendTelegram(message) {
+    try {
+      await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: TELEGRAM_CHAT_ID,
+          text: message,
+          parse_mode: 'HTML',
+          disable_notification: false
+        })
+      });
+    } catch(e) { console.log('Telegram error:', e); }
+  }
+
+  // ── TELEGRAM VOICE ALERT ──
+  async function sendTelegramVoice() {
+    try {
+      // Base64 MP3 alert tone -> Blob -> FormData -> sendVoice
+      const b64 = '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qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqTEFNRTMuMTAwqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq//uSxDkDwAABpAAAACAAADSAAAAEqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqkxBTUUzLjEwMKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqv/7ksQ5A8AAAaQAAAAgAAA0gAAABKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqpMQU1FMy4xMDCqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq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VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVUxBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/7ksQ5A8AAAaQAAAAgAAA0gAAABFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVMQU1FMy4xMDBVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVX/+5LEOQPAAAGkAAAAIAAANIAAAARVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVMQU1FMy4xMDBVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//uQxDmDwAABpAAAACAAADSAAAAEVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMuMTAwVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVWCk/UUjAPgJoEAB4iAQggALBQAOYIwBoGFIB2hgWYIQYUQP+kAAEDgBQwNIZLM//uSxDkDwAABpAAAACAAADSCgAAEk5FkzW6fms6EUfRDg0BQDnmSxAASzHdtDLcNGGQJTmNodiROGDYRmC4BBcBgwEsOZ+BgvRdBwFyoLAHKnpRV7/99AG/S6GLuBHWsxWIxX///9xJU7nIxeiWOENapv////p5yvL8afO1Wv45fZ//////p7eFsQAQYAWuV8occ8/sbOt/pqcGOYGpLP///Qn/3C7ES2bAALTMzkLOl8rsVrMAWAIzAAwEAwBEAZAoA4TAZRgfQJqYFQEomQCJC5nQ0YEYnGFlGFUgvRgTIFEULBxGmcIfnxHyGIcAl7lzqcLFbs77qu1E5ND0Rp5bKqG9LquF+mu2LVXC+EgEEgKRAJEYaPFWAKOQFTISMtWR1P/+X6f/6+66tGr1aVUxBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV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qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqACIyAAB//r1DAqJmAEwyKiSwb+mn8YBg+oOqYsQSdH8BMpJkFQT8YTiCYmCdAdwGmFwBnVMgZSTAGvQEAoCxzC+gmm3/mWcnUW2r/X///////6v9QBXx//v1kiEQMGLzJzY11QOQYT8ZIwcoE/MUNGbj41Ubsx2sF6MIUARzA1QEUyd5MNfjJocBe6C0prCxmnn1G9PZ+3////31TEFNRTMuMTAwVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//uSxIcCSoxZGu3+qkEcBmOlv+1IVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVUAPAf/4emMYwHmjnRuzKdBnmBWgpBgcAReYMKJaGIdLhZ4Cn3gYxEL5mC3hIQoB1hSVAboKIG5TUAX+AGjaI2JE+aKX2/bUfdnf83d7v////6/u1/6P0f3f/V/7Bg//y9MQxcJM8BDSxAyWKMAzBHzAvAhQwacSdMTKWlD1iPacxyQX8MJVCjTBdgYoDgTeA4WkQNzIAAfzAMGsRoRM0N00P/Vz70T9i/1f///+j//6v9Vv///60xBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/7ksSUAkuAWRSt/qiBaAsiib/VEFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVAAALiAA//362xQQEZKDRwzcEN8Ej62UwdAESMUlFmT5vT2Qx5UGLMI6AzjBEQLs3efNIiDK4s2YBRUidTMEH3urk/1fqC0n/+HqHAgKmFRsY6IpnI3mo0ocEdpg9YP8Yq8UBn4vNvBj7wTiYRaBZGBnACQGBDoBjxCgZPSAGzgAAoERzi6ku3b8wedFVOKvz////p////0JMQU1FMy4xMDCqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqr/+5LEhQJIoDUdLf9qQUqK41nP1UqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqoAJwAB//32CgYTGPA+ZjJRntXGbpGZ7/RgYgieYRWqPGy282Jhjor0YD4ESmAwAfgGoBkBt0GAbQFIE9GChiFFJc8bpq/82adPHmTej9f////lP9X+r/////6//aVH/+PpzmCgcYpC48WRgsmWmwbj0pg7wdcYq2kTn3r4yRj+ImqYT8EOGC3grYG422BthOAa1SYHigCAoSBS5OG5cQT/9HWecyctLXev////y//+7X/r/r///V/rTEFNRTMuMTAwqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq//uSxJUDS4xZFs5+qkFuiyLJz9VIqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqgAACeAAP/9eo4SiI6VGFE5oxCBw4/QQMHfAazFSgnA+2QbLMfKAwDCQwIkwQgCeAzImAMVo0DBCOAw+AA9sjDqk027fmGo86gsh//n6aJgMLGJB6ZPKRodHGsGacRphg+wWeYr6bzH7azCZkAob0YRUCTmBbgDwGCDOBm9CAZ6SoHKQGAoLhmS8i9Luv6aM4anGT3/V//7v////q///+//66kxBTUUzLjEwMKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqv/7ksSKAkkAWx0t/qphZQsjGc/VSqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqgAnIAH//PU+NCkx6DDLQ7MyKMyHIDD3/Boi8YAGq2mAUdQRgJ4syYD8EfGBbgkYGvTSBuYHAi14V1gMGAqyWNzRBf/o5xapSqz9n////t//+3/q/Z/2f7P+qAAAAByxJtlf39e0gGgZggYEAZgAoaGunNZRgo4O+YdkS0HTcM5ZivgT4YNOCMmBvAXxvEAbSwmpLgTBCQXDlvCnzw//3v+f/1v+5fPM9f9/v9f36tf1f//V/qpMQU1FMy4xMDCqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqr/+5LEk4ALMFcWzn6qQWwLI/W/7UiqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqAAAJ5AA//36jo6JAwtMZLjUzg44vP5MjB4AGcxUsJcPtlGrTHxwFQwjoAwMD5AfQMmo8DAiIAWR4GHQCHREacWgz9/zPUfdntQb8kH//D1zGAgWYjFRkQhmbkCaJYhsqlmC5hZxiCRvidxRMUGL5Bw5gxIJ8YDAArgYvGAGeCuBn0zAFlABoWjiNUm+36Gs+/Ma7/X93/v/+v//6///X//+qTEFNRTMuMTAwqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq//uSxIoCCSRZHS3+qmFiiyNZz9VIqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqoAJ4AB//316CQnDjiZRFBktJGCIqYy+hgWoieYR4qQGyrc25htgsYYKGEkmB+AoAG0EkBusigbUGAF9EChjFQJM0N01f+lnT5xjw9b/u////6v/9+r/////6//a40P/9+oeDBAwUjCwgZKAm7LR+OuYPMEAGKxlB5+LLcUY/qFamExAohgm4Hqc7bm+ShrcmecAhAY/9Jnhh3//L+8//q7+6Kq3bP////////t/2/////0VUxBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/7ksSSg0t0WRbOfqpBWgrjTb/tSFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVUAAAlYwAAP/9etoRCJgZcZEamtJZyKofk+mDpgiBikQsWfN8enGPFAnphEIBIYG8AqAYwPwACDAw2igMzAALhSaMVLdu35glOnmMhrL/qgAAF8JB/v5+qUwiDDHQ1Mylg0esjT0ZNr9wwXoQHMQlTyjvEdhUxgcUWMF2B5zAIQLgDOQHA2CUgNgGkAuzgNFYT6SR51q7/n2rLR0i8/Yj9T/36Pu/+n/V9+r79Nv/7//rVMQU1FMy4xMDBVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVX/+5LEkYAJyFkdTf6qQYkLIuXP1UhVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVUZAA//x9QcwWAIFD+YoAyYZEqYOJQZQxGYLsJaGIlriJ3//30YzWMNmEQBShgsoMOBv9qgcMQQG6zmAX/QGjYI3IgVzRBP/0dR51PRz33E/T//////9v+3////Z/tU3oMe8vyhnghDQYSDA2AmU3khPmejBywUExRAZ6PjQRzzHeAcIwjcDhMEYAwDhqA1+NM6jgj+RzorV63nh/L97uu9w3cx7h96ct3LtyZys37eAlaMMdf////oADtoyABAzNEr0gBoAOAwBiYBiAQGAsAIpgN4DwYEKB0GA3At5gJoUcYHwHUmJ9PgB+7Y+KZI8JdGC4gkpgewBMesynhvADbTSWYDFZjAoYKAiQQHE40JBgSXGL+mImxUNQYUGGjZjAoCiQaOwwtAxEYU//uSxJUDS7xbFE7+qkFojiONv+1IBgUKCgKQgwjB0J5cRA9Akhcj6g8l6ocvp03Yh+BIPgWHozDMeksolcsn6K/TUta7QV8LdgyCwsLEzJkWFmJu/+//Z/v///9JgZQPwYXMBlmAIgaBguoCdyVGRkkCZqo498YXwKWmI8DFclXKZbVVhH0xhJpgiIs0YKYTBsKaWeTqrZ4wGpmNcXKY7ARzsxw0LSjzEGHlMX0Kow+QKRkBEwZAf5flsxlA/jAhDaMJQGEw0wbzAeBUFQDDAxAwIQM+f/mAGDiYHIIBg4AcGAQCAYBgFoiAHMBYA8VAcQRAIBL///MEEBswDQIQSA0YFQBRgIAEDACYgAPS1LeiMAZVZNb///8OAnMAUAUYAGDACAcAQMgEpdoTWQslTSbk2y0f////HgC0jFaEgEx37VGrhzHReVpUSn3BiNE+3/////6uFN3aXEuyG3cafDzFmKRKjhmU2I1WtxmU0n//////+8bqvfAD9PI3N2Ze8srfJ87kXpq12zjrv0vMccfx//////////ciPP7R3JdHpf/7ksT/gBc0oxb1/YAFkz7eAz/gAM/LtNZhbiSR2X7jcGRD//////Wst63z//LG5q1M7xrKTEFNRTMuMTAwqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqpMQU1FMy4xMDCqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqr/+5LEOQPAAAGkHAAAIAAANIAAAASqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqTEFNRTMuMTAwqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq//uSxDkDwAABpAAAACAAADSAAAAEqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqkxBTUUzLjEwMKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqv/7ksQ5A8AAAaQAAAAgAAA0gAAABKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqpMQU1FMy4xMDCqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqr/+5LEOQPAAAGkAAAAIAAANIAAAASqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqTEFNRTMuMTAwqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq//uSxDkDwAABpAAAACAAADSAAAAEqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqkxBTUUzLjEwMKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqv/7ksQ5A8AAAaQAAAAgAAA0gAAABKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqkxBTUUzLjEwMKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqr/+5DEOYPAAAGkAAAAIAAANIAAAASqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqpMQU1FMy4xMDCqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqr/+5LEOQPAAAGkAAAAIAAANIAAAASqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqTEFNRTMuMTAwqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq//uSxDkDwAABpAAAACAAADSAAAAEqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqkxBTUUzLjEwMKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqv/7ksQ5A8AAAaQAAAAgAAA0gAAABKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqpMQU1FMy4xMDCqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqr/+5LEOQPAAAGkAAAAIAAANIAAAASqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqTEFNRTMuMTAwqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq//uSxDkDwAABpAAAACAAADSAAAAEqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqkxBTUUzLjEwMKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqv/7ksQ5A8AAAaQAAAAgAAA0gAAABKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqpMQU1FMy4xMDCqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqr/+5LEOQPAAAGkAAAAIAAANIAAAASqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqTEFNRTMuMTAwqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq//uSxDkDwAABpAAAACAAADSAAAAEqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqkxBTUUzLjEwMKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqv/7ksQ5A8AAAaQAAAAgAAA0gAAABKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqpMQU1FMy4xMDCqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqr/+5LEOQPAAAGkAAAAIAAANIAAAASqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqTEFNRTMuMTAwqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq//uSxDkDwAABpAAAACAAADSAAAAEqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqkxBTUUzLjEwMKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqv/7ksQ5A8AAAaQAAAAgAAA0gAAABKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqpMQU1FMy4xMDCqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqr/+5LEOQPAAAGkAAAAIAAANIAAAASqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqTEFNRTMuMTAwqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq//uSxDkDwAABpAAAACAAADSAAAAEqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqkxBTUUzLjEwMKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqv/7ksQ5A8AAAaQAAAAgAAA0gAAABKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqpMQU1FMy4xMDCqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqr/+5LEOQPAAAGkAAAAIAAANIAAAASqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqTEFNRTMuMTAwqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq//uSxDkDwAABpAAAACAAADSAAAAEqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqkxBTUUzLjEwMKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqv/7ksQ5A8AAAaQAAAAgAAA0gAAABKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqpMQU1FMy4xMDCqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqr/+5LEOQPAAAGkAAAAIAAANIAAAASqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqTEFNRTMuMTAwqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq//uSxDkDwAABpAAAACAAADSAAAAEqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqkxBTUUzLjEwMKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqv/7ksQ5A8AAAaQAAAAgAAA0gAAABKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqpMQU1FMy4xMDCqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqr/+5LEOQPAAAGkAAAAIAAANIAAAASqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqTEFNRTMuMTAwqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq//uSxDkDwAABpAAAACAAADSAAAAEqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqkxBTUUzLjEwMKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqv/7ksQ5A8AAAaQAAAAgAAA0gAAABKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqkxBTUUzLjEwMKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqr/+5DEOYPAAAGkAAAAIAAANIAAAASqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqpMQU1FMy4xMDCqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqr/+5LEOQPAAAGkAAAAIAAANIAAAASqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqTEFNRTMuMTAwqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq//uSxDkDwAABpAAAACAAADSAAAAEqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqkxBTUUzLjEwMKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqv/7ksQ5A8AAAaQAAAAgAAA0gAAABKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqo=';
+      const byteChars = atob(b64);
+      const bytes = new Uint8Array(byteChars.length);
+      for (let i = 0; i < byteChars.length; i++) bytes[i] = byteChars.charCodeAt(i);
+      const blob = new Blob([bytes], { type: 'audio/mpeg' });
+      const fd = new FormData();
+      fd.append('chat_id', TELEGRAM_CHAT_ID);
+      fd.append('voice', blob, 'alert.mp3');
+      await fetch('https://api.telegram.org/bot' + TELEGRAM_TOKEN + '/sendVoice', {
+        method: 'POST', body: fd
+      });
+    } catch(e) { console.log('Voice send error:', e); }
+  }
+
+  // ── SOUND ──
+  function playOrderSound() {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const notes = [523, 659, 784, 1047];
+      notes.forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0, ctx.currentTime + i * 0.12);
+        gain.gain.linearRampToValueAtTime(1.0, ctx.currentTime + i * 0.12 + 0.05);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.12 + 0.5);
+        osc.start(ctx.currentTime + i * 0.12);
+        osc.stop(ctx.currentTime + i * 0.12 + 0.5);
+      });
+    } catch(e) {}
+  }
+
+  // ── SAVE TO LOCALSTORAGE ──
+  function saveOrderToStorage(order) {
+    try {
+      const existing = JSON.parse(localStorage.getItem('kd_orders') || '[]');
+      existing.unshift(order);
+      localStorage.setItem('kd_orders', JSON.stringify(existing));
+    } catch(e) {}
+  }
+
+  // ── RENDER MENU ──
+  function renderMenu(filter = 'all') {
+    const grid = document.getElementById('menuGrid');
+    const items = filter === 'all' ? menuItems : menuItems.filter(i => i.category === filter);
+    grid.innerHTML = items.map(item => `
+      <div class="menu-card">
+        <div class="menu-img">${item.emoji}</div>
+        <div class="menu-info">
+          <div class="menu-name">${item.name}</div>
+          <div class="menu-desc">${item.desc}</div>
+          <div class="menu-footer">
+            <div class="menu-price">₹${item.price}</div>
+            <button class="add-btn ${cart[item.id] ? 'added' : ''}" onclick="addToCart(${item.id})">
+              ${cart[item.id] ? '✓ ' + cart[item.id].qty : '+ Add'}
+            </button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function filterMenu(cat, btn) {
+    currentFilter = cat;
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderMenu(cat);
+  }
+
+  function addToCart(id) {
+    const item = menuItems.find(i => i.id === id);
+    if (cart[id]) { cart[id].qty++; } else { cart[id] = { ...item, qty: 1 }; }
+    updateCartCount();
+    renderMenu(currentFilter);
+    openCart();
+    showToast('🛒 ' + item.emoji + ' ' + item.name + ' added!');
+  }
+
+  function updateCartCount() {
+    const total = Object.values(cart).reduce((s, i) => s + i.qty, 0);
+    document.getElementById('cartCount').textContent = total;
+  }
+
+  function openCart() {
+    document.getElementById('cartOverlay').classList.add('active');
+    renderCartContent();
+  }
+
+  function closeCart() {
+    document.getElementById('cartOverlay').classList.remove('active');
+  }
+
+  function renderCartContent() {
+    const content = document.getElementById('cartContent');
+    const items = Object.values(cart);
+    if (items.length === 0) {
+      content.innerHTML = '<div class="empty-cart"><div class="empty-cart-icon">🛒</div><p>Your cart is empty</p><p style="font-size:0.8rem;margin-top:0.5rem">Add items from the menu to get started</p></div>';
+      return;
+    }
+    const total = items.reduce((s, i) => s + i.price * i.qty, 0);
+    content.innerHTML = `
+      <div style="margin-bottom:1rem">
+        ${items.map(i => `
+          <div class="cart-item">
+            <div><div style="font-weight:500">${i.emoji} ${i.name}</div><div style="color:var(--muted);font-size:0.78rem">₹${i.price} each</div></div>
+            <div class="cart-item-qty">
+              <button class="qty-btn" onclick="changeQty(${i.id}, -1)">−</button>
+              <span>${i.qty}</span>
+              <button class="qty-btn" onclick="changeQty(${i.id}, 1)">+</button>
+            </div>
+            <div style="color:var(--gold);font-weight:600">₹${i.price * i.qty}</div>
+          </div>`).join('')}
+      </div>
+      <div class="cart-total"><span>Total Amount</span><span class="total-amount">₹${total}</span></div>
+      <div style="margin-bottom:1.5rem;padding:1rem;background:var(--card);border-radius:12px;border:1px solid var(--border)">
+        <div style="font-size:0.8rem;color:var(--gold);font-weight:600;margin-bottom:1rem;text-transform:uppercase;letter-spacing:0.08em">Delivery Details</div>
+        <div style="background:rgba(201,168,76,0.06);border:1px solid rgba(201,168,76,0.15);border-radius:8px;padding:0.75rem;margin-bottom:1rem">
+          <div style="font-size:0.72rem;color:var(--gold);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem">🧾 Your Order Summary</div>
+          ${items.map(i => `<div style="font-size:0.8rem;display:flex;justify-content:space-between;padding:0.2rem 0;border-bottom:1px solid rgba(255,255,255,0.04)"><span>${i.emoji} ${i.name} × ${i.qty}</span><span style="color:var(--gold)">₹${i.price * i.qty}</span></div>`).join('')}
+          <div style="font-size:0.85rem;font-weight:700;display:flex;justify-content:space-between;margin-top:0.5rem;padding-top:0.5rem;border-top:1px solid rgba(201,168,76,0.2)"><span>Total</span><span style="color:var(--gold)">₹${total}</span></div>
+        </div>
+        <div class="form-group"><label class="form-label">Full Name *</label><input type="text" class="form-input" id="custName" placeholder="Enter your name"></div>
+        <div class="form-group"><label class="form-label">Phone Number *</label><input type="tel" class="form-input" id="custPhone" placeholder="+91 XXXXX XXXXX"></div>
+        <div class="form-group"><label class="form-label">Email Address *</label><input type="email" class="form-input" id="custEmail" placeholder="your@email.com"></div>
+        <div class="form-group"><label class="form-label">Delivery Address *</label><textarea class="form-input" id="custAddress" placeholder="House no., Street, Area, City, PIN"></textarea></div>
+        <div class="form-group"><label class="form-label">Special Instructions</label><textarea class="form-input" id="custNotes" placeholder="Less spicy, extra sauce, etc." style="min-height:60px"></textarea></div>
+      </div>
+      <button class="submit-order-btn" id="placeOrderBtn" onclick="placeOrder()">Place Order — ₹${total}</button>
+    `;
+  }
+
+  function changeQty(id, delta) {
+    if (!cart[id]) return;
+    cart[id].qty += delta;
+    if (cart[id].qty <= 0) delete cart[id];
+    updateCartCount();
+    renderMenu(currentFilter);
+    renderCartContent();
+  }
+
+  async function placeOrder() {
+    const name    = document.getElementById('custName').value.trim();
+    const phone   = document.getElementById('custPhone').value.trim();
+    const email   = document.getElementById('custEmail').value.trim();
+    const address = document.getElementById('custAddress').value.trim();
+    const notes   = document.getElementById('custNotes').value.trim();
+    if (!name || !phone || !email || !address) { showToast('⚠️ Please fill all required fields'); return; }
+
+    const items   = Object.values(cart);
+    const total   = items.reduce((s, i) => s + i.price * i.qty, 0);
+    const orderId = 'KD' + Date.now().toString().slice(-6);
+    const timeStr = new Date().toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit' });
+
+    const btn = document.getElementById('placeOrderBtn');
+    btn.disabled = true;
+    btn.textContent = 'Placing order...';
+
+    const order = {
+      id: orderId,
+      customerName: name,
+      customerPhone: phone,
+      customerEmail: email,
+      address: address,
+      notes: notes || '',
+      items: items.map(i => ({ name: i.name, qty: i.qty, price: i.price * i.qty, emoji: i.emoji })),
+      total: total,
+      time: new Date().toISOString(),
+      status: 'new'
+    };
+
+    // Save to localStorage
+    saveOrderToStorage(order);
+
+    // Send Telegram notification
+    const itemsList = items.map(i => `  ${i.emoji} ${i.name} × ${i.qty} — ₹${i.price * i.qty}`).join('\n');
+    const telegramMsg =
+`🚨 <b>NEW ORDER — Kaif &amp; Delicious</b>
+
+🆔 <b>Order ID:</b> ${orderId}
+👤 <b>Name:</b> ${name}
+📞 <b>Phone:</b> ${phone}
+📧 <b>Email:</b> ${email}
+📍 <b>Address:</b> ${address}
+⏰ <b>Time:</b> ${timeStr}
+
+🛒 <b>Items:</b>
+${itemsList}
+
+💰 <b>Total: ₹${total}</b>
+${notes ? '📝 <b>Notes:</b> ' + notes : ''}
+
+✅ Reply: <b>CONFIRM ${orderId}</b> to accept order`;
+
+    // Send to server — server handles Telegram + reminders + voice alerts
+    let serverOk = false;
+    try {
+      const resp = await fetch(SERVER_URL + '/order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(order)
+      });
+      serverOk = resp.ok;
+    } catch(e) { console.warn('Server unreachable:', e); }
+
+    // Fallback: if server down, use direct Telegram + browser reminder
+    if (!serverOk) {
+      await sendTelegram(telegramMsg);
+      await sendTelegramVoice();
+      startTelegramReminder(orderId, name, phone, total);
+    }
+
+    // Play sound on website
+    playOrderSound();
+
+    // Success screen
+    document.getElementById('cartContent').innerHTML = `
+      <div class="success-screen">
+        <div class="success-icon">✅</div>
+        <div class="success-title">Order Placed!</div>
+        <p class="success-msg">
+          <strong>Order ID: ${orderId}</strong><br><br>
+          Thank you ${name}! Your order is confirmed.<br>
+          We will prepare it right away.<br><br>
+          Questions? <a href="https://wa.me/919634950165" target="_blank" style="color:var(--gold)">WhatsApp us</a>
+        </p>
+      </div>`;
+
+    cart = {};
+    updateCartCount();
+    renderMenu(currentFilter);
+  }
+
+  // ── TELEGRAM REMINDER SYSTEM ──
+  // Sends reminder every 30s, polls getUpdates to detect "CONFIRM <orderId>"
+  async function startTelegramReminder(orderId, custName, custPhone, total) {
+    if (activeReminders[orderId]) return; // already running
+
+    let reminderCount = 0;
+    let lastUpdateId = 0;
+
+    // Get current update_id offset so we only read NEW messages
+    try {
+      const r = await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/getUpdates?limit=1&offset=-1`);
+      const d = await r.json();
+      if (d.result && d.result.length > 0) {
+        lastUpdateId = d.result[d.result.length - 1].update_id + 1;
+      }
+    } catch(e) {}
+
+    async function checkConfirm() {
+      try {
+        const r = await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/getUpdates?offset=${lastUpdateId}&limit=20&timeout=0`);
+        const d = await r.json();
+        if (!d.result) return false;
+        for (const upd of d.result) {
+          lastUpdateId = upd.update_id + 1;
+          const text = (upd.message?.text || '').trim().toUpperCase();
+          // Accept: CONFIRM KD123456 or CONFIRM KD 123456
+          if (text.includes('CONFIRM') && text.includes(orderId.toUpperCase())) {
+            return true; // confirmed!
+          }
+        }
+        return false;
+      } catch(e) { return false; }
+    }
+
+    async function sendReminder() {
+      // First check if already confirmed
+      const confirmed = await checkConfirm();
+      if (confirmed) {
+        stopTelegramReminder(orderId);
+        await sendTelegram(
+`✅ <b>Order Confirmed — Reminder Band!</b>
+
+🆔 #${orderId} — ${custName}
+💰 ₹${total}
+
+Shukriya! Reminder band ho gaye. 🎉`
+        );
+        return;
+      }
+
+      reminderCount++;
+      await sendTelegram(
+`⏰ <b>REMINDER #${reminderCount} — Order Pending!</b>
+
+🚨 Order <b>#${orderId}</b> abhi tak confirm nahi hua!
+
+👤 <b>${custName}</b>
+📞 ${custPhone}
+💰 <b>₹${total}</b>
+
+Confirm karne ke liye likho:
+<b>CONFIRM ${orderId}</b>`
+      );
+      await sendTelegramVoice(); // voice alert with every reminder
+    }
+
+    // First reminder after 30 seconds
+    const intervalId = setInterval(sendReminder, 30000);
+    activeReminders[orderId] = { intervalId, lastUpdateId };
+
+    // Update lastUpdateId in closure — keep reference in sync
+    Object.defineProperty(activeReminders[orderId], 'getLastId', { get: () => lastUpdateId });
+  }
+
+  function stopTelegramReminder(orderId) {
+    if (activeReminders[orderId]) {
+      clearInterval(activeReminders[orderId].intervalId);
+      delete activeReminders[orderId];
+    }
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  document.getElementById('cartOverlay').addEventListener('click', function(e) {
+    if (e.target === this) closeCart();
+  });
+
+  renderMenu();
+</script>
+</body>
+</html>
